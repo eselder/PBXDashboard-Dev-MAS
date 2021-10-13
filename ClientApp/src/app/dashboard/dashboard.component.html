@@ -1,0 +1,81 @@
+
+<div class="container-fluid">
+  <div class="row justify-content md center">
+    <div class="btn-group col-3">
+      <a class="navbar-brand" [routerLink]="['/']"><img src="/assets/PBXDashboardLogo.png" alt="PBX Dashboard"></a>
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-center">Dashboard<span style="display:none;">{{ getNumberOfCallQueues() }}</span></h2>
+    </div>
+    <div class="col-3">
+      <table class="table table-sm">
+        <tr class="table-warning" id="abandoned-calls">
+          <td>Abandoned Calls: 0 -- 0%  </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <br>
+  <div class="row justify-content md center">
+    <table class="table table-bordered table-striped table-hover table-sm">
+      <thead>
+        <tr>
+          <th class="table-info">EXT</th>
+          <th class="table-success"><span style="visibility: hidden;">MMM</span>Status<span style="visibility: hidden;">MMM</span></th>
+          <th class="table-success">Duration</th>
+          <th class="table-success">Last Activity</th>
+          <th class="table-primary">Idle Total</th>
+          <th class="table-primary">Avg. Idle</th>
+          <th class="table-primary">Inb</th>
+          <th class="table-primary">Out</th>
+          <th class="table-primary">Total</th>
+          <th class="table-primary">Avg. Call</th>
+          <th class="table-primary">Talk Time</th>
+          <th class="table-info">Time Logged In</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ext of getListOfExtensions()">
+          <td [ngClass]="ext.activeIClass">{{ ext.display }}</td>
+          <td class="capitalize" title="{{ext.subStatus}}" [ngClass]="ext.activeIClass">{{ ext.status }}</td>
+          <td [ngClass]="ext.activeIClass">{{ ext.activeTime }}</td>
+          <td [ngClass]="ext.activeIClass">{{ ext.lastActivity }}</td>
+          <td>{{ ext.idleTime }}</td>
+          <td [ngClass]="ext.idleClass">{{ ext.averageIdleTime }}</td>
+          <td>{{ ext.iCalls }}</td>
+          <td>{{ ext.oCalls }}</td>
+          <td>{{ ext.tCalls }}</td>
+          <td>{{ ext.averageCallTime }}</td>
+          <td>{{ ext.talkTime }}</td>
+          <td>{{ ext.loggedInTime }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="showTable">
+<table class="table table-bordered table-striped table-hover table-sm" *ngIf="records.length > 0">    
+  <thead>    
+    <tr>    
+      <th>ID </th>    
+      <th>FirstName </th>    
+      <th>LastName </th>    
+      <th>Total </th>    
+      <th>Data1 </th>    
+      <th>Data2 </th>    
+    </tr>    
+  </thead>    
+  <tbody>    
+    <tr *ngFor="let record of records;let i = index;">    
+      <td> <span>{{record.id}}</span> </td>    
+      <td> <span>{{record.firstName}}</span> </td>    
+      <td> <span>{{record.lastName}}</span> </td>    
+      <td> <span>{{record.total}}</span> </td>    
+      <td> <span>{{record.data1}}</span> </td>    
+      <td> <span>{{record.data2}}</span> </td>    
+    </tr>    
+  </tbody>    
+</table>   
+</div>
+<input type="file" #csvReader name="Upload CSV" id="txtFileUpload" (change)="uploadListener($event)" accept=".csv" />    
+

@@ -1,0 +1,35 @@
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.btn {
+  margin: 5px;
+}
+
+.btn-primary, .btn-info {
+  border-width: 2px;
+  color: #FFF !important;
+  border-color: #1861AC !important;
+}
+
+  .btn-primary:hover {
+    border-width: 2px;
+    background-color: #1861AC !important;
+    border-color: #0d445b;
+  }

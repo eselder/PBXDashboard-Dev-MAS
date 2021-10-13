@@ -1,0 +1,189 @@
+<app-nav-menu></app-nav-menu>
+<div class="container-fluid">
+  <div class="row justify-content md center">
+<div class="col-md-9 offset-md-1">
+<h3 [ngClass]="{inviz: reportCalled == true}">Extensions</h3>
+<form [ngClass]="{inviz: reportCalled == true}" #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+<div class="form-group">
+  <label for="Extensions">Select Multiple Extensions</label>
+  <select class="form-control" 
+  id="ext" 
+  ngModel
+  #ext
+  name="extensions"
+  title="Use the 'Ctrl' key to select multiple extensions"
+  multiple>
+    <option 
+    *ngFor="let extension of getListOfExtensions()" 
+    [value]="extension.number"
+    (input)="onUpdateExtension($event)" 
+    >EXT: {{ extension.number }} {{ extension.display }}</option>
+  </select>
+
+</div>
+<h3>Filters</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+  <label for="Call-Origin">
+    Call Origin</label><br>
+    <input type="radio" id="outgoing" name="call_origin" value="outgoing" ngModel>
+    <label for="outgoing">&#160; Outgoing</label><br>
+    <input type="radio" id="incoming" name="call_origin" value="incoming" ngModel>
+    <label for="incoming">&#160; Incoming</label><br>
+    <input type="radio" id="both_origin" name="call_origin" value="both" checked="checked" ngModel>
+    <label for="both">&#160; Both</label>
+    </div>
+    <div class="col-sm">
+      <label for="call_scope">
+        Call Scope
+      </label><br>
+      <input type="radio" id="internal" name="call_scope" value="internal" ngModel>
+      <label for="internal">&#160; Internal</label><br>
+      <input type="radio" id="external" name="call_scope" value="external" ngModel>
+      <label for="external">&#160; External</label><br>
+      <input type="radio" id="both_scope" name="call_scope" value="both" checked="checked" ngModel>
+      <label for="both">&#160; Both</label>
+    </div>
+  </div>
+  </div>
+  <hr />
+  <label for="start_date">Start Date:&nbsp;</label>
+  <input type="date"
+    id="start_date"
+    name="start_date"
+    ngModel>
+  <label for="end_date">&nbsp;&nbsp;&nbsp;End Date:&nbsp;</label>
+<input type="date"
+  id="end_date"
+  name="end_date"
+  ngModel>
+  <hr>
+  <label for="weekdays">Days of the Week: &nbsp;</label>
+  <label for="monday">&nbsp;&nbsp;&nbsp;Monday</label>
+  <input type="checkbox" checked
+    id="monday"
+    name="monday"
+    value="monday" 
+    [(ngModel)]="monday" />
+  <label for="tuesday">&nbsp;&nbsp;Tuesday</label>
+  <input type="checkbox" checked
+    id="tuesday"
+    name="tuesday"
+    value="tuesday"
+    [(ngModel)]="tuesday" />
+  <label for="wednesday">&nbsp;&nbsp;Wednesday</label>
+  <input type="checkbox" checked
+    id="wednesday"
+    name="wednesday"
+    value="wednesday"
+    [(ngModel)]="wednesday" />
+  <label for="thursday">&nbsp;&nbsp;Thursday</label>
+  <input type="checkbox" checked
+    id="thursday"
+    name="thursday"
+    value="thursday"
+    [(ngModel)]="thursday" />
+  <label for="friday">&nbsp;&nbsp;Friday</label>
+  <input type="checkbox" checked
+    id="friday"
+    name="friday"
+    value="friday"
+    [(ngModel)]="friday" />
+  <label for="saturday">&nbsp;&nbsp;Saturday</label>
+  <input type="checkbox" checked
+    id="saturday"
+    name="saturday"
+    value="saturday"
+    [(ngModel)]="saturday" />
+  <label for="sunday">&nbsp;&nbsp;Sunday</label>
+  <input type="checkbox" checked
+    id="sunday"
+    name="sunday"
+    value="sunday"
+    [(ngModel)]="sunday" />
+  <hr />
+<label for="start_time">Between:&nbsp;</label>
+<input type="time"
+  id="start_time"
+  name="start_time"
+  [(ngModel)]="startTime">
+<label for="end_time">&nbsp;&nbsp;And:&nbsp;</label>
+<input type="time"
+  id="end_time"
+  name="end_time"
+  [(ngModel)]="endTime">
+  <label for="exts">&nbsp;&nbsp;&nbsp;Filter By Time</label>
+  <input type="checkbox"
+  id="filter_by_time"
+  name="filter_by_time"
+  value="filter_by_time" 
+  [(ngModel)]="filter_by_time" />
+  <hr>
+
+<button class="btn btn-primary btn-lg"
+  type="submit"
+  >Create Report</button>
+</form>
+<div *ngIf="reportCalled">
+  <h3>
+    Report Called
+  </h3>
+    <p *ngFor="let ext of extsIn">EXT-{{ ext }} <{{ getExtension(ext) }}></p>
+</div>
+
+<br />
+<div *ngIf="reportCalled">
+<p class="text-muted"> Call Origin Filter: <{{ callOrigin }}> | Call Scope Filter: <{{ callScope }}></p>
+<p class="text-muted" *ngIf="filterByDate">Date Filter: {{ startDate.toLocaleDateString() }} to {{ endDate.toLocaleDateString() }}</p>
+<p class="text-muted" *ngIf="filter_by_time">Time Filter: {{ startTime }} to {{ endTime }}</p>
+<p class="text-muted">Days Incuded: 
+  <span *ngIf="monday">Monday </span>
+  <span *ngIf="tuesday">Tuesday </span>
+  <span *ngIf="wednesday">Wednesday </span>
+  <span *ngIf="thursday">Thursday </span>
+  <span *ngIf="friday">Friday </span>
+  <span *ngIf="saturday">Saturday </span>
+  <span *ngIf="sunday">Sunday </span>
+</p>
+<hr>
+<p> Call Records: {{ totalCalls }} on {{ daysTotal }} day(s) ({{ avgCallsPerDay }} per day)</p>
+<p> Talk Duration - Per Call:&nbsp;{{ getTalkDuration() }} Total: {{ totalTalkTime }} Daily: {{ dailyTalkTime }}</p>
+<p> Total Duration - Per Call:&nbsp;{{ getTotalDuration() }} Total: {{totalTotalTime }} Daily: {{ dailyTotalTime }}</p>
+
+<table *ngIf="reportCalls" class='table table-striped' aria-labelledby="tableLabel">
+  <thead>
+    <tr>
+      <th>Call ID</th>
+      <th>Origination</th>
+      <th>Start Time</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Events</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let call of reportCalls">
+      <td>{{ call?.pbxid }}</td>
+      <td>{{ call?.origination || 'Loading Data...'}}</td>
+      <td>{{ getLocalString(call.startTime) }}</td>
+      <td>{{ call?.from || 'Loading Data...'}}</td>
+      <td>{{ call?.to || 'Loading Data...'}}</td>
+      <td>{{call?.events.length || 'Event'}} 
+        <button (click)="sideClick(call)">Details</button>
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+</div>
+</div>
+<div class="col-2" style="border-left: 2px solid; float: right; ">
+  <app-sidebar
+  [str]="str"
+  [arr]="arr">
+</app-sidebar>
+</div>
+</div>
+</div>
+<hr>

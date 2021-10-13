@@ -1,0 +1,205 @@
+<app-nav-menu></app-nav-menu>
+<div class="container-fluid">
+  <div class="row justify-content md center">
+  <div class="col-md-9 offset-md-1">
+  <h3 [ngClass]="{inviz: reportCalled === true}">Call Queues</h3>
+  <form [ngClass]="{inviz: reportCalled === true}" #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+  <div class="form-group">
+    <label for="Call Queue">Call Queues</label>
+    <select class="form-control" 
+    id="queue" 
+    ngModel
+    #queue
+    name="queue">
+      <option 
+      *ngFor="let queue of getListOfQueues()" 
+      [value]="queue.number"
+      (input)="onUpdateQueue($event)" 
+      >{{ queue.display }} <{{ queue.strategy }}></option>
+    </select>
+  </div>
+  <h3>Filters</h3>
+  <label for="start_date">Start Date:&nbsp;</label>
+  <input type="date"
+    id="start_date"
+    name="start_date"
+    ngModel>
+  <label for="end_date">&nbsp;&nbsp;&nbsp;End Date:&nbsp;</label>
+  <input type="date"
+    id="end_date"
+    name="end_date"
+    ngModel>
+    <hr>
+    <label for="weekdays">Days of the Week: &nbsp;</label>
+    <label for="monday">&nbsp;&nbsp;&nbsp;Monday</label>
+    <input type="checkbox" checked
+      id="monday"
+      name="monday"
+      value="monday" 
+      [(ngModel)]="monday" />
+    <label for="tuesday">&nbsp;&nbsp;Tuesday</label>
+    <input type="checkbox" checked
+      id="tuesday"
+      name="tuesday"
+      value="tuesday"
+      [(ngModel)]="tuesday" />
+    <label for="wednesday">&nbsp;&nbsp;Wednesday</label>
+    <input type="checkbox" checked
+      id="wednesday"
+      name="wednesday"
+      value="wednesday"
+      [(ngModel)]="wednesday" />
+    <label for="thursday">&nbsp;&nbsp;Thursday</label>
+    <input type="checkbox" checked
+      id="thursday"
+      name="thursday"
+      value="thursday"
+      [(ngModel)]="thursday" />
+    <label for="friday">&nbsp;&nbsp;Friday</label>
+    <input type="checkbox" checked
+      id="friday"
+      name="friday"
+      value="friday"
+      [(ngModel)]="friday" />
+    <label for="saturday">&nbsp;&nbsp;Saturday</label>
+    <input type="checkbox"
+      id="saturday"
+      name="saturday"
+      value="saturday"
+      [(ngModel)]="saturday" />
+    <label for="sunday">&nbsp;&nbsp;Sunday</label>
+    <input type="checkbox"
+      id="sunday"
+      name="sunday"
+      value="sunday"
+      [(ngModel)]="sunday" />
+    <hr />
+  <label for="start_time">Between:&nbsp;</label>
+  <input type="time"
+    id="start_time"
+    name="start_time"
+    [(ngModel)]="startTime">
+  <label for="end_time">&nbsp;&nbsp;And:&nbsp;</label>
+  <input type="time"
+    id="end_time"
+    name="end_time"
+    [(ngModel)]="endTime">
+    <label for="exts">&nbsp;&nbsp;&nbsp;Filter By Time</label>
+    <input type="checkbox"
+    id="filter_by_time"
+    name="filter_by_time"
+    value="filter_by_time" 
+    [(ngModel)]="filter_by_time" />
+    <hr>
+  <div class="form-group">
+    <label for="Extensions">Filter Extensions</label>
+    <label for="exts">&nbsp;&nbsp;&nbsp;Filter By Extension</label>
+    <input type="checkbox"
+    id="filter_by_ext"
+    name="filter_by_ext"
+    value="filter_by_ext" 
+    [(ngModel)]="filter_by_ext" />
+    <select class="form-control" 
+    id="exts" 
+    ngModel
+    #exts
+    name="exts"
+    title="Use the 'Ctrl' key to select multiple extensions"
+    multiple>
+      <option 
+      *ngFor="let ext of getListOfExtensions()" 
+      [value]="ext.number"
+      (input)="onUpdateQueue($event)" 
+      >{{ ext.display }} <{{ ext.number }}></option>
+    </select>
+  <hr />
+  <label for="Call-Outcome">
+    Call Outcome</label>
+    <label for="exts">&nbsp;&nbsp;&nbsp;Filter By Outcome</label>
+    <input type="checkbox"
+    id="filter_by_outcome"
+    name="filter_by_outcome"
+    value="filter_by_outcome" 
+    [(ngModel)]="filter_by_outcome" /><br>
+    <input type="radio" id="completed" name="call_outcome" value="completed" ngModel>
+    <label for="completed">&#160; Completed</label><br>
+    <input type="radio" id="abandoned" name="call_outcome" value="abandoned" ngModel>
+    <label for="abandoned">&#160; Abandoned</label><br>
+    <input type="radio" id="redirected" name="call_outcome" value="redirected" ngModel>
+    <label for="redirected">&#160; Redirected</label>
+    </div>
+    <div class="col-sm">
+  </div>
+  <hr />
+  <button class="btn btn-primary btn-lg"
+    type="submit"
+    >Create Report</button>
+  </form>
+  <div *ngIf="reportCalled">
+  <h2 >Report Called: {{ queueDisplay }} - {{ queueStrategy }}</h2>
+  <hr />
+  <p class="text-muted" *ngIf="filterByDate">Date Filter: {{ startDate.toLocaleDateString() }} to {{ endDate.toLocaleDateString() }}</p>
+  <p class="text-muted">Days Incuded: 
+    <span *ngIf="monday">Monday </span>
+    <span *ngIf="tuesday">Tuesday </span>
+    <span *ngIf="wednesday">Wednesday </span>
+    <span *ngIf="thursday">Thursday </span>
+    <span *ngIf="friday">Friday </span>
+    <span *ngIf="saturday">Saturday </span>
+    <span *ngIf="sunday">Sunday </span>
+  </p>
+  <p class="text-muted" *ngIf="filter_by_time">Time Filter: {{ startTime }} to {{ endTime }}</p>
+  <div class="text-muted" *ngIf="filter_by_ext">
+    <p>Extensions: 
+      <span *ngFor="let ext of extsFilter"><{{ ext }}></span>
+    </p>
+  </div>
+  <p class="text-muted" *ngIf="filter_by_outcome">Outcome: {{ call_outcome }}</p>
+  <hr />
+  <p > Total Queue Logs: {{ reportLogs.length }}</p>
+  <p > Total Calls Abandoned: {{ getAbandonedTotal() }}</p>
+  <p >Percent Abandoned {{ getAbandonedPercent() }}</p><hr>
+  <h4 >Calls Answerd By Extension</h4>
+  <div >
+    <p *ngFor="let ext of queueExts; index as i;">{{ queueMembers[i] }}<{{ ext }}>- Total answers: {{ extsAnswers[i] }} -- {{ answersPercent[i] }}&#37;</p><hr>
+  <p >Average Wait Time: {{ averageWaitTime }} seconds</p>
+  <p >{{ longestWaitTimeCallString }} <button (click)="sideClick(longestWaitTimeCall)">Details</button></p><hr>
+  <table class='table table-striped' aria-labelledby="tableLabel">
+    <thead>
+      <tr>
+        <th>Call ID</th>
+        <th>Start Time</th>
+        <th>From</th>
+        <th>Answered By</th>
+        <th>Wait Time (sec)</th>
+        <th>Outcome</th>
+        <th>Events</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let call of queueCalls">
+        <td>{{ call?.pbxid }}</td>
+        <td>{{ getLocalString(call.startTime) }}</td>
+        <td>{{ call?.from }}</td>
+        <td>{{ getAnsweredBy(call) }}</td>
+        <td>{{ call?.waitTime }}</td>
+        <td> {{ call?.queueOutcome }} </td>
+        <td>{{ call?.events.length }} 
+          <button (click)="sideClick(call)">Details</button>
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+  </div>
+  </div>
+  </div>
+  <div class="col-2" style="border-left: 2px solid; float: right; ">
+    <app-sidebar
+    [str]="str"
+    [arr]="arr">
+  </app-sidebar>
+  </div>
+  </div>
+  </div>
+  <hr />

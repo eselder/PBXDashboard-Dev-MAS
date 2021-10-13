@@ -1,0 +1,10 @@
+.active, .btn:hover {
+  background-color: #17A2B8;
+  color: white;
+}
+
+.btn-group {
+  position: absolute;
+  left: 50%;
+  transform: translatex(-50%);
+}

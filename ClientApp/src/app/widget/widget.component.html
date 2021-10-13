@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="row justify-content md center">
+    <table class="table table-bordered table-striped table-hover table-sm">
+      <thead>
+        <tr>
+          <th class="table-info">EXT</th>
+          <th class="table-success"><span style="visibility: hidden;">MM</span>Status<span style="visibility: hidden;">MM</span></th>
+          <th class="table-success">Duration</th>
+          <th class="table-primary">Avg. Idle</th>
+          <th class="table-primary">Inb</th>
+          <th class="table-primary">Out</th>
+          <th class="table-primary">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ext of getListOfExtensions()">
+          <td [ngClass]="ext.activeIClass">{{ ext.display }}</td>
+          <td class="capitalize" [ngClass]="ext.activeIClass">{{ ext.subStatus ? ext.subStatus : ext.status }}</td>
+          <td [ngClass]="ext.activeIClass">{{ ext.activeTime }}</td>
+          <td [ngClass]="ext.idleClass">{{ ext.averageIdleTime }}</td>
+          <td>{{ ext.iCalls }}</td>
+          <td>{{ ext.oCalls }}</td>
+          <td>{{ ext.tCalls }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<br />
+<br />

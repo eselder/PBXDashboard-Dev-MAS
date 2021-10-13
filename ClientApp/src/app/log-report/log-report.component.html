@@ -1,0 +1,136 @@
+<app-nav-menu></app-nav-menu>
+<div class="container-fluid">
+  <div class="row justify-content md center">
+    <div class="col-md-12">
+      <h1 class="text-center">Log Reports</h1>
+      <h3 *ngIf="!submitted" class="text-center">Today - {{getTodayString()}}</h3>
+      <form class="form-group" #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+          <label for="Day">Log History</label>
+          <select class="form-control"
+                  id="day"
+                  ngModel
+                  #day
+                  name="day"
+                  [(ngModel)]="formDate">
+                  <option value="Oct-11-2021">Oct-11-2021</option>
+                  <option value="Oct-09-2021">Oct-09-2021</option>
+                  <option value="Oct-08-2021">Oct-08-2021</option>
+                  <option value="Oct-07-2021">Oct-07-2021</option>
+                  <option value="Oct-06-2021">Oct-06-2021</option>
+                  <option value="Oct-05-2021">Oct-05-2021</option>
+                  <option value="Oct-04-2021">Oct-04-2021</option>
+                  <option value="Oct-01-2021">Oct-01-2021</option>
+                  <option value="Sep-30-2021">Sep-30-2021</option>
+                  <option value="Sep-29-2021">Sep-29-2021</option>
+                  <option value="Sep-28-2021">Sep-28-2021</option>
+                  <option value="Sep-27-2021">Sep-27-2021</option>
+                  <option value="Sep-25-2021">Sep-25-2021</option>
+                  <option value="Sep-24-2021">Sep-24-2021</option>
+                  <option value="Sep-23-2021">Sep-23-2021</option>
+                  <option value="Sep-22-2021">Sep-22-2021</option>
+                  <option value="Sep-21-2021">Sep-21-2021</option>
+                  <option value="Sep-20-2021">Sep-20-2021</option>
+                  <option value="Sep-18-2021">Sep-18-2021</option>
+                  <option value="Sep-17-2021">Sep-17-2021</option>
+                  <option value="Sep-16-2021">Sep-16-2021</option>
+                  <option value="Sep-15-2021">Sep-15-2021</option>
+                  <option value="Sep-14-2021">Sep-14-2021</option>
+                  <option value="Sep-13-2021">Sep-13-2021</option>
+                  <option value="Sep-11-2021">Sep-11-2021</option>
+                  <option value="Sep-10-2021">Sep-10-2021</option>
+                  <option value="Sep-09-2021">Sep-09-2021</option>
+                  <option value="Sep-08-2021">Sep-08-2021</option>
+                  <option value="Sep-07-2021">Sep-07-2021</option>
+                  <option value="Sep-03-2021">Sep-03-2021</option>
+                  <option value="Sep-02-2021">Sep-02-2021</option>
+                  <option value="Sep-01-2021">Sep-01-2021</option>
+                  <option value="Aug-31-2021">Aug-31-2021</option>
+                  <option value="Aug-30-2021">Aug-30-2021</option>
+                  <option value="Aug-29-2021">Aug-29-2021</option>
+                  <option value="Aug-28-2021">Aug-28-2021</option>
+                  <option value="Aug-27-2021">Aug-27-2021</option>
+                  <option value="Aug-26-2021">Aug-26-2021</option>
+                  <option value="Aug-25-2021">Aug-25-2021</option>
+                  <option value="Aug-24-2021">Aug-24-2021</option>
+                  <option value="Aug-23-2021">Aug-23-2021</option>
+                  <option value="Aug-21-2021">Aug-21-2021</option>
+                  <option value="Aug-20-2021">Aug-20-2021</option>
+                  <option value="Aug-19-2021">Aug-19-2021</option>
+          </select>
+        <button *ngIf="!submitted" class="btn btn-primary btn-lg"
+                type="submit"
+                (click)="updateReport(f)">
+          Create Report
+        </button>
+      </form>
+      <div *ngIf="reportDate">
+        <table *ngFor="let ext of getListOfExtensions()" class="table table-striped table-bordered table-sm">
+          <thead class="thead-dark">
+            <tr>
+              <th>{{ext.display}}</th>
+              <th class="table-active">Duration(hrs:min:sec)</th>
+              <th class="table-active">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let status of ext.statusList; index as i">
+              <td class="capitalize">
+                {{status}} {{ext.subStatusList[i]}}
+              </td>
+              <td>
+                {{hrsMinSec(ext.durationList[i])}}
+              </td>
+              <td>
+                {{ext.logoutTimesStringList[i]}} - {{ext.loginTimesList[i]}}
+              </td>
+            </tr>
+            <tr class="table-secondary">
+              <td></td>
+              <td><strong>Type Totals</strong></td>
+              <td></td>
+            </tr>
+            <tr class="table-info" *ngFor="let type of ext.breakTypeList; index as i">
+              <td class="capitalize">{{ type }}</td>
+              <td>{{hrsMinSec(ext.breakTypeTotals[i])}} Total</td>
+              <td>{{ext.breakTypeNumber[i]}} Time(s)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="mainExtensions">
+        <table *ngFor="let ext of getListOfExtensions()" class="table table-striped table-bordered table-sm">
+          <thead class="thead-dark">
+            <tr>
+              <th>{{ext.display}}</th>
+              <th class="table-active">Duration(hrs:min:sec)</th>
+              <th class="table-active">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let status of ext.statusList; index as i">
+              <td class="capitalize">
+                {{status}} {{ext.subStatusList[i]}}
+              </td>
+              <td>
+                {{hrsMinSec(ext.durationList[i])}}
+              </td>
+              <td>
+                {{ext.logoutTimesStringList[i]}} - {{ext.loginTimesList[i]}}
+              </td>
+            </tr>
+            <tr class="table-secondary">
+              <td></td>
+              <td><strong>Type Totals</strong></td>
+              <td></td>
+            </tr>
+            <tr class="table-info" *ngFor="let type of ext.breakTypeList; index as i">
+              <td class="capitalize">{{ type }}</td>
+              <td>{{hrsMinSec(ext.breakTypeTotals[i])}} Total</td>
+              <td>{{ext.breakTypeNumber[i]}} Time(s)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+</div>

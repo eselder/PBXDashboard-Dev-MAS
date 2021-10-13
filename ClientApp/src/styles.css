@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary{
+  color: #fff;
+  background-color: #1b6ec2 !important;
+  border-color: #1861ac;
+}
+
+.btn-success {
+  color: #FFF !important; 
+}
+
+body {
+  font-family: Roboto;
+}
+
+.btn-outline-info
+{
+  border-color: #0D445B;
+  color: #1861AC;
+}
+
+.btn-outline-info:not(:disabled):not(.disabled).active{
+  background-color: #1861AC;
+}
+
+.btn-outline-info:not(:disabled):not(.disabled):hover{
+  background-color: #1861AC;
+}
+
+th, td {
+  text-align: center;
+}
+
+

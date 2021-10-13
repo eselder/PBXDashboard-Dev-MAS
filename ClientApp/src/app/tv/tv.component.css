@@ -1,0 +1,26 @@
+body {
+  background-color: #454D55 !important;
+}
+.container-fluid {
+  background-color: #454D55;
+  height: 100vh;
+}
+
+.table-sm td, .table-sm th {
+  padding: .01rem;
+  font-family: Arial, Helvetica, sans-serif !important;
+  line-height: 1.33;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+body {
+    overflow: hidden;
+}
+div {
+    overflow: hidden;
+}
+table {
+    overflow: hidden;
+}
